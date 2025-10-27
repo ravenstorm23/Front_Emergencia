@@ -1,9 +1,9 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
-import HeroSection from '../Components/HeroSection';
-import FeaturesSection from '../Components/FeaturesSection';
-import AboutBanner from '../Components/AboutBanner';
-import Footer from '../Components/Footer';
+import Navbar from '../Components/ComponentsHome/Navbar';
+import HeroSection from '../Components/ComponentsHome/HeroSection';
+import FeaturesSection from '../Components/ComponentsHome/FeaturesSection';
+import AboutBanner from '../Components/ComponentsHome/AboutBanner';
+import Footer from '../Components/ComponentsHome/Footer';
 
 export default function Home() {
   return (

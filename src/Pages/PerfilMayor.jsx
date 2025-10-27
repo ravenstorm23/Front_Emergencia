@@ -3,23 +3,25 @@
 // DESCRIPCIÓN: Paso 2 del registro - Información médica (solo adultos mayores)
 // ============================================
 
+// Este Codigo maneja el segundo paso del registro para adultos mayores.
+// Aquí recopilamos su información médica importante para poder brindarles mejor
+// atención en caso de emergencias.
+
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function PerfilMayor() {
+  // Estas herramientas nos ayudan a navegar entre páginas y obtener datos
   const location = useLocation();
   const navigate = useNavigate();
 
-  // ========================================
-  // OBTENER DATOS DEL PASO 1
-  // ========================================
+  // Primer paso: ¿Tenemos los datos básicos del usuario?
+  // Revisamos si vinieron en la navegación o si están guardados localmente
   const [userData, setUserData] = useState(() => {
-    // Primero intentar desde el state de navegación
     if (location.state?.userData) {
       return location.state.userData;
     }
     
-    // Si no, intentar desde localStorage
     try {
       const stored = localStorage.getItem("pendingUser");
       return stored ? JSON.parse(stored) : null;
@@ -28,27 +30,26 @@ export default function PerfilMayor() {
     }
   });
 
-  // ========================================
-  // FORMULARIO DE INFORMACIÓN MÉDICA
-  // ========================================
+  // Aquí guardamos toda la información médica que el usuario va completando 
+  // Cada campo tiene un propósito específico para ayudar en emergencias
   const [formData, setFormData] = useState({
-    tipo_sangre: "",
-    alergias: "",
-    condiciones_cronicas: "",
-    nombre_doctor: "",
-    telefono_doctor: "",
-    seguro_medico: "",
-    numero_seguro: "",
-    medicamentos_actuales: "",
-    notas_emergencia: ""
+    tipo_sangre: "",           // Crucial para transfusiones
+    alergias: "",             // Evitar reacciones alérgicas
+    condiciones_cronicas: "",  // Enfermedades que requieren atención especial
+    nombre_doctor: "",         // Contacto médico principal
+    telefono_doctor: "",       // Para consultas urgentes
+    seguro_medico: "",         // Cobertura médica
+    numero_seguro: "",         // Identificación del seguro
+    medicamentos_actuales: "", // Tratamientos en curso
+    notas_emergencia: ""       // Información adicional importante
   });
 
+  // Control de errores y estado de carga para mejor experiencia de usuario
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  // ========================================
-  // VERIFICAR QUE TENGA DATOS DEL PASO 1
-  // ========================================
+  // ¡Ojo! 👀 Si el usuario llegó aquí sin completar el paso 1,
+  // lo devolvemos amablemente al registro
   useEffect(() => {
     if (!userData) {
       alert("⚠️ Debes completar el registro primero");
@@ -56,27 +57,24 @@ export default function PerfilMayor() {
     }
   }, [userData, navigate]);
 
-  // ========================================
-  // MANEJO DE CAMBIOS
-  // ========================================
+  // Cada vez que el usuario escribe algo, actualizamos el formulario
+  // y quitamos cualquier mensaje de error para ese campo
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: "" }));
   };
 
-  // ========================================
-  // VALIDACIÓN
-  // ========================================
+  // Verificamos que la información importante esté completa
+  // Somos flexibles pero recomendamos llenar lo básico
   const validate = () => {
     const newErrors = {};
 
-    // Tipo de sangre (opcional pero recomendado)
     if (!formData.tipo_sangre) {
       newErrors.tipo_sangre = "Recomendado: selecciona tu tipo de sangre";
     }
 
-    // Al menos uno de los campos médicos debe estar lleno
+    // Necesitamos al menos alguna información médica
     const hasMedicalInfo = formData.alergias || 
                           formData.condiciones_cronicas || 
                           formData.medicamentos_actuales ||
@@ -90,35 +88,35 @@ export default function PerfilMayor() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // ========================================
-  // SUBMIT
-  // ========================================
+  // ¡El momento de guardar todo! 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Advertencia si no completa, pero permitir continuar
+    // Si hay campos recomendados sin llenar, preguntamos si quiere continuar
     const hasWarnings = !formData.tipo_sangre;
     if (hasWarnings && !validate()) {
       const continuar = window.confirm(
-        "⚠️ No completaste todos los campos recomendados.\n\n¿Deseas continuar de todas formas?\n\n(Puedes agregar esta información después)"
+        "⚠️ No completaste todos los campos recomendados.\n\n" +
+        "¿Deseas continuar de todas formas?\n\n" +
+        "(Puedes agregar esta información después)"
       );
       if (!continuar) return;
     }
 
+    // Mostramos que estamos trabajando...
     setIsLoading(true);
 
     try {
-      // Simulación de guardado
+      // En un futuro, aquí conectaremos con el backend
+      // Por ahora, simulamos un pequeño delay
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // Combinar datos del paso 1 y paso 2
+      // Preparamos todos los datos para guardar
       const registroCompleto = {
-        // Datos básicos (paso 1)
         ...userData,
-        
-        // Datos médicos (paso 2)
         perfil_medico: {
           tipo_sangre: formData.tipo_sangre,
+          // Convertimos las listas separadas por comas en arrays ordenados
           alergias: formData.alergias.split(',').map(a => a.trim()).filter(Boolean),
           condiciones_cronicas: formData.condiciones_cronicas.split(',').map(c => c.trim()).filter(Boolean),
           nombre_doctor: formData.nombre_doctor,
@@ -131,24 +129,14 @@ export default function PerfilMayor() {
         }
       };
 
-      // TODO: Guardar en backend
-      // const response = await fetch('http://localhost:3000/api/usuarios/completar-perfil', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(registroCompleto)
-      // });
-      // const data = await response.json();
-
-      // Guardar temporalmente
+      // Guardamos temporalmente (en producción irá a la base de datos)
       localStorage.setItem("registroCompleto", JSON.stringify(registroCompleto));
-      
-      // Limpiar datos temporales
       localStorage.removeItem("pendingUser");
 
-      // Mostrar éxito
+      // ¡Éxito! 🎉 Avisamos al usuario
       alert(`✅ ¡Registro completo!\n\nBienvenido/a ${userData.nombre}\n\nAhora puedes iniciar sesión`);
 
-      // Redirigir al login
+      // Y lo llevamos a iniciar sesión
       navigate("/login", {
         state: { 
           message: "Registro exitoso. Ya puedes iniciar sesión.",
@@ -157,6 +145,7 @@ export default function PerfilMayor() {
       });
 
     } catch (error) {
+      // Si algo sale mal, mostramos un mensaje amigable
       setErrors({ 
         general: "Error al guardar información. Intenta nuevamente." 
       });

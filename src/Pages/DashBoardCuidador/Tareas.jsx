@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import SidebarCuidador from "../Components/ComponentsDashBoardCuidador/SidebarCuidador";
-import { useTasks } from "../Components/ComponentsDashBoardCuidador/TaskContext";
+import SidebarCuidador from "./Components/SidebarCuidador";
+import { useTasks } from "./Components/TaskContext";
 import { PlusCircle } from "lucide-react";
 
 const Tareas = () => {

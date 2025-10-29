@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import Navbar from "./Components/ComponentsHome/Navbar";
-import Home from "./Pages/Home";
+import Navbar from "./Pages/Home/components/Navbar";
+import Home from "./Pages/Home/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import PerfilMayor from "./Pages/PerfilMayor";
 import PerfilCuidador from "./Pages/PerfilCuidador";
-import DashBoardPerfilC from "./Pages/DashBoardPerfilC";
-import CalendarioCuidador from "./Pages/CalendarioCuidador";
-import Tareas from "./Pages/Tareas";
-import { TaskProvider } from "./Components/ComponentsDashBoardCuidador/TaskContext"; 
+import DashBoardPerfilC from "./Pages/DashBoardCuidador/DashBoardPerfilC";
+import CalendarioCuidador from "./Pages/DashBoardCuidador/CalendarioCuidador";
+import Tareas from "./Pages/DashBoardCuidador/Tareas";
+import { TaskProvider } from "./Pages/DashBoardCuidador/Components/TaskContext"; 
 
 function AppContent() {
   const location = useLocation();

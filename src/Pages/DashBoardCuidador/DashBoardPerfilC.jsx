@@ -3,13 +3,13 @@
 // DESCRIPCIÓN: Dashboard completo del cuidador listo para funcionar
 // ============================================
 
-import SidebarCuidador from "../Components/ComponentsDashBoardCuidador/SidebarCuidador";
-import StatsCard from "../Components/ComponentsDashBoardCuidador/StatsCard";
-import AlertsPanel from "../Components/ComponentsDashBoardCuidador/AlertsPanel";
-import ActivityFeed from "../Components/ComponentsDashBoardCuidador/ActivityFeed";
-import QuickActions from "../Components/ComponentsDashBoardCuidador/QuickActions";
-import PatientCard from "../Components/ComponentsDashBoardCuidador/PatientCard";
-import Notificaciones from "../Components/ComponentsDashBoardCuidador/Notificaciones"; 
+import SidebarCuidador from "./Components/SidebarCuidador";
+import StatsCard from "./Components/StatsCard";
+import AlertsPanel from "./Components/AlertsPanel";
+import ActivityFeed from "./Components/ActivityFeed";
+import QuickActions from "./Components/QuickActions";
+import PatientCard from "./Components/PatientCard";
+import Notificaciones from "./Components/Notificaciones"; 
 
 import { Users, Heart, ClipboardList } from "lucide-react";
 

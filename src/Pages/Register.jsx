@@ -1,22 +1,3 @@
-/**
- * Register.jsx
- * 
- * Componente de registro de usuarios para CuidApp.
- * Primer paso del proceso de registro donde se recopilan los datos básicos
- * del usuario (adulto mayor o cuidador).
- * 
- * Funcionalidades:
- * - Validación de formulario en tiempo real
- * - Diferenciación entre roles de usuario
- * - Navegación al paso 2 según el rol seleccionado
- * - Almacenamiento temporal de datos durante el proceso
- * 
- * Flujo:
- * 1. Usuario completa información básica
- * 2. Sistema valida los datos ingresados
- * 3. Redirige a PerfilMayor o PerfilCuidador según corresponda
- */
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

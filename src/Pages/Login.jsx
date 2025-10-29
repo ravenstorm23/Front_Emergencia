@@ -4,10 +4,10 @@
 // ============================================
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ Importar para navegación
+import { useNavigate } from "react-router-dom"; //  Importar para navegación
 
 const Login = () => {
-  const navigate = useNavigate(); // ✅ Hook para redirigir
+  const navigate = useNavigate(); // Hook para redirigir
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({});

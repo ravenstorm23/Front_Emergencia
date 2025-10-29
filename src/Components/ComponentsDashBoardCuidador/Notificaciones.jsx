@@ -1,13 +1,14 @@
-// src/Components/NotificationBell.jsx
+// src/Components/Notificationes.jsx
 import React, { useState } from "react";
 import { Bell, X } from "lucide-react";
 import AlertsPanel from "./AlertsPanel";
 
-const NotificationBell = () => {
+const Notificaciones = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
+        
       {/* Botón flotante */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -35,4 +36,4 @@ const NotificationBell = () => {
   );
 };
 
-export default NotificationBell;
+export default Notificaciones;

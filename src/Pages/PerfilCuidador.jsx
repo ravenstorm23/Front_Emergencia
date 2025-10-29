@@ -2,7 +2,7 @@
  * PerfilCuidador.jsx
  * 
  * Paso 2 del registro — Vinculación del cuidador con un adulto mayor.
- * Si el usuario decide no vincularse aún, lo lleva igual al DashboardCuidador.
+ * Si el usuario decide no vincularse aún, lo lleva igual al DashBoardPerfilC.
  */
 
 import { useLocation, useNavigate } from "react-router-dom";
@@ -85,7 +85,7 @@ export default function PerfilCuidador() {
       localStorage.setItem("activeUser", JSON.stringify(userData));
 
       // Redirigir al dashboard del cuidador
-      navigate("/dashboard-cuidador");
+      navigate("/dashboard-perfil-c");
     } catch (error) {
       setErrors({ general: "Error al registrar la vinculación" });
     } finally {
@@ -96,7 +96,7 @@ export default function PerfilCuidador() {
   // Si el usuario decide vincular más tarde
   const handleSkip = () => {
     localStorage.setItem("activeUser", JSON.stringify(userData));
-    navigate("/dashboard-cuidador");
+    navigate("/dashboard-perfil-c");
   };
 
   return (

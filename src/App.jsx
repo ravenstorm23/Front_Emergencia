@@ -5,15 +5,15 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import PerfilMayor from "./Pages/PerfilMayor";
 import PerfilCuidador from "./Pages/PerfilCuidador";
-import DashboardCuidador from "./Pages/DashboardCuidador";
-
-
+import DashBoardPerfilC from "./Pages/DashBoardPerfilC";
+import CalendarioCuidador from "./Pages/CalendarioCuidador";
+import Tareas from "./Pages/Tareas";
+import { TaskProvider } from "./Components/ComponentsDashBoardCuidador/TaskContext"; 
 
 function AppContent() {
   const location = useLocation();
-
-  // Rutas donde NO quieres mostrar el Navbar
-  const hideNavbar = ["/dashboard-cuidador"].includes(location.pathname);
+  const hideNavbarRoutes = ["/dashboard-perfil-c", "/calendario", "/tareas"];
+  const hideNavbar = hideNavbarRoutes.includes(location.pathname);
 
   return (
     <>
@@ -24,7 +24,9 @@ function AppContent() {
         <Route path="/registro" element={<Register />} />
         <Route path="/perfil-mayor" element={<PerfilMayor />} />
         <Route path="/perfil-cuidador" element={<PerfilCuidador />} />
-        <Route path="/dashboard-cuidador" element={<DashboardCuidador />} />
+        <Route path="/dashboard-perfil-c" element={<DashBoardPerfilC />} />
+        <Route path="/calendario" element={<CalendarioCuidador />} />
+        <Route path="/tareas" element={<Tareas />} />
       </Routes>
     </>
   );
@@ -33,7 +35,9 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <TaskProvider> 
+        <AppContent />
+      </TaskProvider>
     </BrowserRouter>
   );
 }

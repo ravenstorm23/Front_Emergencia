@@ -1,7 +1,9 @@
+import ayudar from "../../../assets/img/ayudar.png";
+import abrazo from "../../../assets/img/abrazo.png";
+import compania from "../../../assets/img/compañia.png";
 import React, { useState, useEffect } from "react";
-import ayudar from "../../assets/img/ayudar.png";
-import abrazo from "../../assets/img/abrazo.png";
-import compania from "../../assets/img/compañia.png";
+
+
 
 export default function AboutBanner() {
   const items = [

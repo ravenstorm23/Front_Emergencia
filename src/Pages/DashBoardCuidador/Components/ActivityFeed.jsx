@@ -1,7 +1,4 @@
-// ============================================
-// ARCHIVO: src/Components/ActivityFeed.jsx
-// DESCRIPCIÓN: Línea de tiempo con actividades recientes del cuidador
-// ============================================
+
 
 import { Calendar, CheckCircle, FileText, Phone } from "lucide-react";
 

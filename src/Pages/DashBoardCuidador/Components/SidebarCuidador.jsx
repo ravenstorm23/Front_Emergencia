@@ -10,11 +10,12 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const SidebarCuidador = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const menu = [
     { path: "/dashboard-perfil-c", label: "Dashboard", icon: LayoutDashboard },
@@ -26,9 +27,15 @@ const SidebarCuidador = () => {
   ];
 
   useEffect(() => {
-    // cerrar menú móvil al cambiar ruta
     setIsOpen(false);
   }, [location.pathname]);
+
+  const handleLogout = () => {
+    // Limpiar sesión / tokens
+    localStorage.removeItem("token"); // si usas token
+    // Redirigir a login
+    navigate("/login");
+  };
 
   return (
     <>
@@ -65,17 +72,21 @@ const SidebarCuidador = () => {
           })}
         </nav>
 
-        <Link
-          to="/logout"
-          className="flex items-center gap-3 text-red-600 hover:bg-red-50 px-4 py-3 border-t"
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 text-red-600 hover:bg-red-50 px-4 py-3 border-t w-full"
         >
           <LogOut className="w-5 h-5" />
           Cerrar sesión
-        </Link>
+        </button>
       </aside>
 
-      {/* overlay móvil */}
-      {isOpen && <div className="fixed inset-0 bg-black bg-opacity-40 z-30 md:hidden" onClick={() => setIsOpen(false)} />}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-40 z-30 md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
     </>
   );
 };

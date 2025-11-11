@@ -1,29 +1,23 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Animaciones personalizadas */
-@layer utilities {
-  @keyframes fade-in {
-    0% { opacity: 0; transform: translateY(10px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
+@keyframes fade-in {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
 
-  .animate-fade-in {
-    animation: fade-in 1.5s ease-in-out;
-  }
+.animate-fade-in {
+  animation: fade-in 1.5s ease-in-out;
+}
 
-  .bg-animated-gradient {
-    background: linear-gradient(135deg, #e6f0ff, #b3d4ff, #80b8ff);
-    background-size: 300% 300%;
-    animation: gradientShift 8s ease infinite;
-  }
+.bg-animated-gradient {
+  background: linear-gradient(135deg, #e6f0ff, #b3d4ff, #80b8ff);
+  background-size: 300% 300%;
+  animation: gradientShift 8s ease infinite;
+}
 
-  @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Scrollbar personalizada */

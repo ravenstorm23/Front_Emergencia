@@ -1,45 +1,38 @@
 import { useState, useEffect } from "react";
-import SidebarCuidador from "./Components/SidebarCuidador";
-import StatsCard from "./Components/StatsCard";
-import AlertsPanel from "./Components/AlertsPanel";
-import ActivityFeed from "./Components/ActivityFeed";
-import QuickActions from "./Components/QuickActions";
-import PatientCard from "./Components/PatientCard";
-import Notificaciones from "./Components/Notificaciones"; 
+import SidebarCuidador from "./components/SidebarCuidador";
+import StatsCard from "./components/StatsCard";
+import AlertsPanel from "./components/AlertsPanel";
+import ActivityFeed from "./components/ActivityFeed";
+import QuickActions from "./components/QuickActions";
+import PatientCard from "./components/PatientCard";
+import Notificaciones from "./components/Notificaciones";
 
 import { Users, Heart, ClipboardList } from "lucide-react";
 
-import { getPacientes } from "../../Services/pacienteService"; 
-import { getActividades } from "../../Services/actividadService"; 
-import { getAlertas } from "../../Services/alertaService"; 
+import { usePacientes } from "../../hooks/usePacientes";
+import { useActividades } from "../../hooks/useActividades";
+import { getAlertas } from "../../services/alertaService";
 
 
 const DashBoardPerfilC = () => {
   const [usuario, setUsuario] = useState(null);
-  const [patients, setPatients] = useState([]);
-  const [activities, setActivities] = useState([]);
   const [alerts, setAlerts] = useState([]);
 
+  // Obtenemos usuario del storage para pasar el ID a los hooks
   useEffect(() => {
     const usuarioStorage = JSON.parse(localStorage.getItem("usuario"));
-    if (!usuarioStorage) return;
+    if (usuarioStorage) setUsuario(usuarioStorage);
+  }, []);
 
-    setUsuario(usuarioStorage);
+  const { patients, loading: loadingPatients } = usePacientes(usuario?._id);
+  const { activities, loading: loadingActivities } = useActividades(usuario?._id);
 
-    // Fetch pacientes, actividades y alertas
-    getPacientes(usuarioStorage._id)
-      .then(data => setPatients(data))
-      .catch(err => console.error(err));
-
-    getActividades(usuarioStorage._id)
-      .then(data => setActivities(data))
-      .catch(err => console.error(err));
-
-    getAlertas(usuarioStorage._id)
+  useEffect(() => {
+    if (!usuario?._id) return;
+    getAlertas(usuario._id)
       .then(data => setAlerts(data))
       .catch(err => console.error(err));
-
-  }, []);
+  }, [usuario]);
 
   return (
     <div className="flex h-screen bg-gray-100 text-gray-900">

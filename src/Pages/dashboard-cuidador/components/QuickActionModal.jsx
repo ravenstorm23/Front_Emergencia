@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
-import { useTasks } from "./TaskContext";
+import { useTasks } from "../../../context/TaskContext";
 
 const QuickActionModal = ({ actionType, onClose }) => {
   const { agregarTarea } = useTasks();

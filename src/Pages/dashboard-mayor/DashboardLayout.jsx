@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-import SidebarA from "./Components/SidebarA";
-import TopbarA from "./Components/TopbarA";
-import EmergencyButton from "./Components/EmergencyButton";
+import SidebarA from "./components/SidebarA";
+import TopbarA from "./components/TopbarA";
+import EmergencyButton from "./components/EmergencyButton";
 
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);

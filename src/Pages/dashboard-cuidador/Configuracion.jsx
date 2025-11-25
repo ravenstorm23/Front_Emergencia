@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import SidebarCuidador from "./Components/SidebarCuidador";
-import ConfigForm from "./Components/ConfigForm";
+import SidebarCuidador from "./components/SidebarCuidador";
+import ConfigForm from "./components/ConfigForm";
 
 // Simulación de usuario
 const usuarioFake = {

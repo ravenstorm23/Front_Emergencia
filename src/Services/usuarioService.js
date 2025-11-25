@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api"; // Cambia a tu URL real
+const API_URL = "http://localhost:4000/api"; // Cambia a tu URL real
 
 export async function getUsuarioByEmail(email) {
   const res = await fetch(`${API_URL}/usuarios?email=${email}`);

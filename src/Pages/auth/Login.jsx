@@ -1,44 +1,22 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../Services/authService";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login, isLoading, error } = useAuth();
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (error) setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setIsLoading(true);
-
     try {
-      // Llamamos loginUser con objeto
-      const response = await loginUser(formData); // { token, user }
-
-      // Guardar token y usuario en localStorage
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user));
-
-      // Redirigir según rol
-      if (response.user.rol === "cuidador") navigate("/perfil-cuidador");
-      else if (response.user.rol === "adulto_mayor") navigate("/perfil-mayor");
-      else navigate("/");
+      await login(formData);
     } catch (err) {
-      console.error(err);
-      setError(
-        err.response?.data?.msg ||
-        err.response?.data?.message ||
-        "Error al iniciar sesión. Verifica tus datos."
-      );
-    } finally {
-      setIsLoading(false);
+      // Error is handled by hook and exposed via error state
     }
   };
 
@@ -83,9 +61,8 @@ export default function Login() {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full py-3 mt-4 bg-cyan-600 rounded-lg text-white font-bold ${
-              isLoading ? "opacity-50 cursor-not-allowed" : "hover:scale-105 shadow-lg"
-            }`}
+            className={`w-full py-3 mt-4 bg-cyan-600 rounded-lg text-white font-bold ${isLoading ? "opacity-50 cursor-not-allowed" : "hover:scale-105 shadow-lg"
+              }`}
           >
             {isLoading ? "Verificando..." : "Ingresar"}
           </button>

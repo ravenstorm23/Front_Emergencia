@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import SidebarCuidador from "./Components/SidebarCuidador";
-import CalendarioVistaMensual from "./Components/CalendarioVistaMensual";
-import { useTasks } from "./Components/TaskContext";
+import SidebarCuidador from "./components/SidebarCuidador";
+import CalendarioVistaMensual from "./components/CalendarioVistaMensual";
+import { useTasks } from "../../context/TaskContext";
 import { X } from "lucide-react";
 
 const CalendarioCuidador = () => {

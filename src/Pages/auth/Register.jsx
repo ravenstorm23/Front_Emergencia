@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { registerUser } from "../Services/authService";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function Register() {
   const navigate = useNavigate();
+  const { register, isLoading, error: serverError, setError: setServerError } = useAuth();
 
   const [formData, setFormData] = useState({
     nombre: "",
@@ -16,15 +17,13 @@ export default function Register() {
   });
 
   const [errors, setErrors] = useState({});
-  const [serverError, setServerError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
-    if (serverError) setServerError("");
+    if (serverError) setServerError(null);
   };
 
   const validate = () => {
@@ -44,38 +43,12 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setServerError("");
-
     if (!validate()) return;
-    setIsLoading(true);
 
     try {
-      const payload = { ...formData };
-      const data = await registerUser(payload);
-
-      if (data.token && data.user) {
-        // Guardar token y usuario en localStorage
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-
-        // Redirección según rol
-        const rol = data.user.rol.trim().toLowerCase();
-        if (rol === "cuidador") navigate("/perfil-cuidador");
-        else if (rol === "adulto mayor") navigate("/perfil-mayor");
-        else navigate("/login");
-      } else {
-        setServerError("No se pudo registrar el usuario");
-      }
+      await register(formData);
     } catch (err) {
-      console.error("Error al registrar:", err);
-      setServerError(
-        err.response?.data?.msg ||
-        err.response?.data?.message ||
-        err.message ||
-        "Error al registrar usuario"
-      );
-    } finally {
-      setIsLoading(false);
+      // Error handled by hook
     }
   };
 

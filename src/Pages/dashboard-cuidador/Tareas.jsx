@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import SidebarCuidador from "./Components/SidebarCuidador";
-import PacienteSelector from "./Components/PacienteSelector"; // <-- Importa el nuevo selector
+import SidebarCuidador from "./components/SidebarCuidador";
+import PacienteSelector from "./components/PacienteSelector";
 import {
   obtenerActividades,
   crearActividad,
   eliminarActividad,
   actualizarActividad,
-} from "../../Services/actividadesService";
+} from "../../services/actividadesService";
 
 // Simulamos listado de pacientes (puedes reemplazarlo con tu fetch real)
 const pacientesFake = [
@@ -164,12 +164,12 @@ const Tareas = ({ pacienteId: pacienteIdProp }) => {
                 {tipo === "Cita"
                   ? "Agendar cita médica"
                   : tipo === "Medicamento"
-                  ? "Renovar medicamento"
-                  : tipo === "Llamada"
-                  ? "Llamada de seguimiento"
-                  : tipo === "Informe"
-                  ? "Generar informe del paciente"
-                  : "Registrar visita"}
+                    ? "Renovar medicamento"
+                    : tipo === "Llamada"
+                      ? "Llamada de seguimiento"
+                      : tipo === "Informe"
+                        ? "Generar informe del paciente"
+                        : "Registrar visita"}
               </h2>
 
               {formVisible === tipo.toLowerCase() ? (

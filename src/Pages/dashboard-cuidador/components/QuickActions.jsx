@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Plus, Calendar, FileText, Users, Phone } from "lucide-react";
-import { useTasks } from "./TaskContext";
+import { useTasks } from "../../../context/TaskContext";
 
 const QuickActions = () => {
   const { tareas, agregarTarea, toggleTarea, eliminarVariasTareas } = useTasks();

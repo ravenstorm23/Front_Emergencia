@@ -20,7 +20,7 @@ const DashBoardPerfilC = () => {
 
   // Obtenemos usuario del storage para pasar el ID a los hooks
   useEffect(() => {
-    const usuarioStorage = JSON.parse(localStorage.getItem("usuario"));
+    const usuarioStorage = JSON.parse(localStorage.getItem("user"));
     if (usuarioStorage) setUsuario(usuarioStorage);
   }, []);
 

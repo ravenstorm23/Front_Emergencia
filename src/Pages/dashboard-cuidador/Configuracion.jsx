@@ -9,9 +9,11 @@ const Configuracion = () => {
   const [toast, setToast] = useState(null);
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
+    const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+    if (storedUser && storedUser._id) {
       setUser(storedUser);
+    } else {
+      setToast({ type: "error", message: "Debes iniciar sesión primero" });
     }
   }, []);
 

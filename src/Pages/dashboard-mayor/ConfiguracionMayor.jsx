@@ -20,13 +20,22 @@ const ConfiguracionMayor = () => {
 
     useEffect(() => {
         const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-        if (storedUser) {
+        if (storedUser && storedUser._id) {
             setUser({
-                ...storedUser,
+                _id: storedUser._id,
+                nombre: storedUser.nombre || "",
+                email: storedUser.email || "",
+                telefono: storedUser.telefono || "",
+                direccion: storedUser.direccion || "",
+                password: "",
+                nombreFamiliar: storedUser.nombreFamiliar || "",
+                telefonoFamiliar: storedUser.telefonoFamiliar || "",
                 medicamentos: Array.isArray(storedUser.medicamentos) ? storedUser.medicamentos.join(", ") : (storedUser.medicamentos || ""),
                 enfermedades: Array.isArray(storedUser.enfermedades) ? storedUser.enfermedades.join(", ") : (storedUser.enfermedades || ""),
-                password: "", // No mostrar contraseña actual
             });
+        } else {
+            // No hay sesión, mostrar error
+            setToast({ type: "error", message: "Debes iniciar sesión primero" });
         }
     }, []);
 

@@ -21,6 +21,7 @@ import VincularPaciente from "./Pages/dashboard-cuidador/VincularPaciente";
 import ConfiguracionAlertasCuidador from "./Pages/dashboard-cuidador/ConfiguracionAlertas";
 import ReportesCuidador from "./Pages/dashboard-cuidador/ReportesCuidador";
 import ChatCuidador from "./Pages/dashboard-cuidador/ChatCuidador";
+import ConfiguracionMayor from "./Pages/dashboard-mayor/ConfiguracionMayor";
 import { TaskProvider } from "./context/TaskContext";
 
 function AppContent() {
@@ -50,6 +51,7 @@ function AppContent() {
         <Route path="vincular" element={<VincularCuidador />} />
         <Route path="alertas" element={<ConfiguracionAlertasMayor />} />
         <Route path="salud" element={<MiSalud />} />
+        <Route path="configuracion" element={<ConfiguracionMayor />} />
       </Route>
     </Routes>
   );

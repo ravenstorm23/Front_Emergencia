@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import SidebarCuidador from "./components/SidebarCuidador";
-import { User, Phone, FileText, Heart, Activity, ArrowLeft } from "lucide-react";
+import { User, Phone, FileText, Heart, Activity, ArrowLeft, Bell, Calendar } from "lucide-react";
 import { getPacientes } from "../../services/pacienteService";
+import { getAlerts } from "../../services/alertService";
+import { obtenerActividades } from "../../services/actividadesService";
 
 // Componente para secciones de información
-const InfoSection = ({ title, icon: Icon, children }) => (
-    <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
+const InfoSection = ({ title, icon: Icon, children, className = "" }) => (
+    <div className={`bg-white p-6 rounded-lg shadow-sm mb-6 ${className}`}>
         <div className="flex items-center gap-3 mb-4 border-b pb-3">
             <div className="p-2 bg-blue-50 rounded-lg text-blue-600">
                 <Icon size={24} />
@@ -21,26 +23,39 @@ const PerfilPaciente = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [paciente, setPaciente] = useState(null);
+    const [alertas, setAlertas] = useState([]);
+    const [actividades, setActividades] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const loadPaciente = async () => {
+        const loadData = async () => {
             try {
-                const user = JSON.parse(localStorage.getItem("usuario"));
+                const user = JSON.parse(localStorage.getItem("user"));
                 if (user?._id) {
-                    // En una app real, tendríamos un endpoint getPacienteById
-                    // Por ahora, filtramos de la lista de vinculados
+                    // 1. Cargar datos del paciente
                     const pacientes = await getPacientes(user._id);
                     const found = pacientes.find(p => p._id === id);
                     setPaciente(found);
+
+                    if (found) {
+                        // 2. Cargar alertas del paciente
+                        const alertsData = await getAlerts(found._id);
+                        setAlertas(alertsData);
+
+                        // 3. Cargar actividades (filtrando por pacienteId si es necesario)
+                        // Nota: Si el endpoint devuelve todas, filtramos aquí. Idealmente el endpoint soportaría ?pacienteId=...
+                        const actividadesData = await obtenerActividades();
+                        const filteredActividades = actividadesData.filter(a => a.pacienteId === found._id);
+                        setActividades(filteredActividades);
+                    }
                 }
             } catch (error) {
-                console.error("Error loading patient:", error);
+                console.error("Error loading patient data:", error);
             } finally {
                 setLoading(false);
             }
         };
-        loadPaciente();
+        loadData();
     }, [id]);
 
     if (loading) return <div className="flex h-screen items-center justify-center">Cargando...</div>;
@@ -99,60 +114,90 @@ const PerfilPaciente = () => {
 
                     {/* Contactos de Emergencia */}
                     <InfoSection title="Contactos de Emergencia" icon={Phone}>
-                        {/* Datos simulados por ahora, ya que no vienen en el modelo básico de usuario */}
                         <div className="space-y-4">
-                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
-                                <div>
-                                    <p className="font-semibold text-gray-800">Hijo/a Principal</p>
-                                    <p className="text-sm text-gray-600">+57 300 123 4567</p>
+                            {paciente.nombreFamiliar ? (
+                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                    <div>
+                                        <p className="font-semibold text-gray-800">{paciente.nombreFamiliar} (Familiar)</p>
+                                        <p className="text-sm text-gray-600">{paciente.telefonoFamiliar}</p>
+                                    </div>
+                                    <button className="p-2 text-green-600 hover:bg-green-50 rounded-full">
+                                        <Phone size={20} />
+                                    </button>
                                 </div>
-                                <button className="p-2 text-green-600 hover:bg-green-50 rounded-full">
-                                    <Phone size={20} />
-                                </button>
-                            </div>
-                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
-                                <div>
-                                    <p className="font-semibold text-gray-800">Servicio Médico</p>
-                                    <p className="text-sm text-gray-600">123</p>
-                                </div>
-                                <button className="p-2 text-green-600 hover:bg-green-50 rounded-full">
-                                    <Phone size={20} />
-                                </button>
-                            </div>
+                            ) : (
+                                <p className="text-gray-500">No hay contacto familiar registrado.</p>
+                            )}
                         </div>
                     </InfoSection>
 
-                    {/* Historial Médico Básico */}
+                    {/* Historial Médico */}
                     <InfoSection title="Historial Médico" icon={Activity}>
                         <div className="space-y-4">
                             <div>
-                                <h3 className="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wider">Alergias</h3>
+                                <h3 className="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wider">Medicamentos</h3>
                                 <div className="flex flex-wrap gap-2">
-                                    <span className="px-3 py-1 bg-red-50 text-red-700 rounded-full text-sm">Penicilina</span>
-                                    <span className="px-3 py-1 bg-red-50 text-red-700 rounded-full text-sm">Polen</span>
+                                    {paciente.medicamentos ? (
+                                        paciente.medicamentos.split(',').map((med, i) => (
+                                            <span key={i} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">
+                                                {med.trim()}
+                                            </span>
+                                        ))
+                                    ) : (
+                                        <span className="text-gray-500 text-sm">No registrados</span>
+                                    )}
                                 </div>
                             </div>
                             <div>
-                                <h3 className="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wider">Condiciones</h3>
+                                <h3 className="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wider">Enfermedades / Condiciones</h3>
                                 <div className="flex flex-wrap gap-2">
-                                    <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">Hipertensión</span>
-                                    <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">Diabetes Tipo 2</span>
+                                    {paciente.enfermedades ? (
+                                        paciente.enfermedades.split(',').map((enf, i) => (
+                                            <span key={i} className="px-3 py-1 bg-red-50 text-red-700 rounded-full text-sm">
+                                                {enf.trim()}
+                                            </span>
+                                        ))
+                                    ) : (
+                                        <span className="text-gray-500 text-sm">No registradas</span>
+                                    )}
                                 </div>
                             </div>
                         </div>
                     </InfoSection>
 
-                    {/* Documentos y Archivos */}
-                    <InfoSection title="Documentos" icon={FileText}>
-                        <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-lg">
-                            <div className="mx-auto w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-3">
-                                <FileText size={24} />
+                    {/* Alertas Recientes */}
+                    <InfoSection title="Alertas Recientes" icon={Bell}>
+                        {alertas.length > 0 ? (
+                            <div className="space-y-3 max-h-60 overflow-y-auto">
+                                {alertas.slice(0, 5).map((alerta) => (
+                                    <div key={alerta._id} className="p-3 bg-red-50 border border-red-100 rounded-lg flex justify-between items-center">
+                                        <div>
+                                            <p className="font-medium text-red-800">{alerta.mensaje || "Alerta de emergencia"}</p>
+                                            <p className="text-xs text-red-600">{new Date(alerta.fecha).toLocaleString()}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                            <p className="text-gray-500 mb-2">No hay documentos subidos</p>
-                            <button className="text-blue-600 font-medium hover:underline text-sm">
-                                + Subir documento
-                            </button>
-                        </div>
+                        ) : (
+                            <p className="text-gray-500">No hay alertas recientes.</p>
+                        )}
+                    </InfoSection>
+
+                    {/* Próximas Actividades */}
+                    <InfoSection title="Próximas Actividades" icon={Calendar}>
+                        {actividades.length > 0 ? (
+                            <div className="space-y-3 max-h-60 overflow-y-auto">
+                                {actividades.slice(0, 5).map((act) => (
+                                    <div key={act._id} className="p-3 bg-blue-50 border border-blue-100 rounded-lg">
+                                        <p className="font-medium text-blue-800">{act.titulo}</p>
+                                        <p className="text-sm text-blue-600">{act.descripcion}</p>
+                                        <p className="text-xs text-blue-500 mt-1">{new Date(act.fechaHora).toLocaleString()}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-gray-500">No hay actividades programadas.</p>
+                        )}
                     </InfoSection>
                 </div>
             </main>

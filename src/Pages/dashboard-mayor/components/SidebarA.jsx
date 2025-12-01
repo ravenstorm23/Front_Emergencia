@@ -15,6 +15,7 @@ const SidebarA = () => {
     { icon: <Users size={22} />, label: "Mi Familia", path: "/dashboard-mayor/familia" },
     { icon: <UserCheck size={22} />, label: "Mi Cuidador", path: "/dashboard-mayor/cuidador" },
     { icon: <Bell size={22} />, label: "Notificaciones", path: "/dashboard-mayor/notificaciones" },
+    { icon: <Users size={22} />, label: "Configuración", path: "/dashboard-mayor/configuracion" },
   ];
 
   const handleClick = (path) => {

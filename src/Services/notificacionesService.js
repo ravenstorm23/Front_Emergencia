@@ -6,7 +6,7 @@ const getAuthHeaders = () => {
     const token = localStorage.getItem("token");
     return {
         headers: {
-            "x-token": token,
+            Authorization: `Bearer ${token}`,
         },
     };
 };

@@ -23,11 +23,22 @@ const Notificaciones = () => {
 
   const cargarNotificaciones = async () => {
     try {
+      // Solo cargar si hay token de sesión
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setNotificaciones([]);
+        return;
+      }
+
       setLoading(true);
       const data = await obtenerNotificaciones();
       setNotificaciones(data);
     } catch (error) {
       console.error("Error cargando notificaciones:", error);
+      // Si es error 401, limpiar notificaciones
+      if (error.response?.status === 401) {
+        setNotificaciones([]);
+      }
     } finally {
       setLoading(false);
     }
@@ -76,8 +87,8 @@ const Notificaciones = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`group relative ${noLeidas > 0
-            ? "bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 shadow-lg shadow-red-500/50"
-            : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg shadow-blue-500/30"
+          ? "bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 shadow-lg shadow-red-500/50"
+          : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg shadow-blue-500/30"
           } text-white p-4 rounded-full transition-all duration-300 transform hover:scale-110 active:scale-95`}
         title="Notificaciones"
       >

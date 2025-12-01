@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, Plus, Clock, MapPin } from "lucide-react";
-import { crearActividad, actualizarActividad } from "../../../Services/actividadesService";
+import { crearActividad, actualizarActividad } from "../../../services/actividadesService";
 import ModalActividad from "./ModalActividad";
 
 const CalendarioVistaSemanal = ({ actividades = [], onActividadChange }) => {

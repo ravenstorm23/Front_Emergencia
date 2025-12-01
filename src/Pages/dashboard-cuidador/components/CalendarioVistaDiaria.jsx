@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, Plus, Clock } from "lucide-react";
-import { crearActividad, actualizarActividad } from "../../../Services/actividadesService";
+import { crearActividad, actualizarActividad } from "../../../services/actividadesService";
 import ModalActividad from "./ModalActividad";
 
 const CalendarioVistaDiaria = ({ actividades = [], onActividadChange }) => {
@@ -167,8 +167,8 @@ const CalendarioVistaDiaria = ({ actividades = [], onActividadChange }) => {
                                                             </span>
                                                             {act.prioridad && (
                                                                 <span className={`px-2 py-0.5 rounded-full font-medium ${act.prioridad === 'alta' ? 'bg-red-200 text-red-800' :
-                                                                        act.prioridad === 'media' ? 'bg-yellow-200 text-yellow-800' :
-                                                                            'bg-green-200 text-green-800'
+                                                                    act.prioridad === 'media' ? 'bg-yellow-200 text-yellow-800' :
+                                                                        'bg-green-200 text-green-800'
                                                                     }`}>
                                                                     {act.prioridad}
                                                                 </span>

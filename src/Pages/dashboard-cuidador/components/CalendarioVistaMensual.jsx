@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, Clock, MapPin } from "lucide-react";
-import { crearActividad, actualizarActividad, eliminarActividad } from "../../../Services/actividadesService";
+import { crearActividad, actualizarActividad, eliminarActividad } from "../../../services/actividadesService";
 import ModalActividad from "./ModalActividad";
 
 const CalendarioVistaMensual = ({ actividades = [], onActividadChange }) => {
@@ -181,10 +181,10 @@ const CalendarioVistaMensual = ({ actividades = [], onActividadChange }) => {
               <div className="flex items-center justify-between mb-2">
                 <span
                   className={`text-sm font-medium ${dia.esOtroMes
-                      ? "text-gray-400"
-                      : hoy
-                        ? "bg-blue-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold"
-                        : "text-gray-700"
+                    ? "text-gray-400"
+                    : hoy
+                      ? "bg-blue-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold"
+                      : "text-gray-700"
                     }`}
                 >
                   {dia.fecha.getDate()}

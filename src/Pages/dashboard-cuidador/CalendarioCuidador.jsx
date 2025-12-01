@@ -4,7 +4,7 @@ import CalendarioVistaMensual from "./components/CalendarioVistaMensual";
 import CalendarioVistaSemanal from "./components/CalendarioVistaSemanal";
 import CalendarioVistaDiaria from "./components/CalendarioVistaDiaria";
 import FiltrosCalendario from "./components/FiltrosCalendario";
-import { obtenerActividades } from "../../Services/actividadesService";
+import { obtenerActividades } from "../../services/actividadesService";
 import { Calendar, List, Clock } from "lucide-react";
 
 const CalendarioCuidador = () => {

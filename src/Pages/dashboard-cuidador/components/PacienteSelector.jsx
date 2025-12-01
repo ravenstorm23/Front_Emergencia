@@ -1,12 +1,7 @@
 // src/Pages/Pacientes/Components/Pacientes.jsx
 import React, { useState, useEffect } from "react";
 import { Search, Check, Edit, Calendar } from "lucide-react";
-
-const pacientesFake = [
-  { _id: "64fa2b1c8a1234567890abcd", nombre: "Juan Pérez", estado: "activo" },
-  { _id: "64fa2b1c8a1234567890abce", nombre: "María López", estado: "seguimiento" },
-  { _id: "64fa2b1c8a1234567890abcf", nombre: "Carlos Gómez", estado: "inactivo" },
-];
+import { getPacientes } from "../../../services/pacienteService";
 
 const estadoColor = {
   activo: "bg-green-100 text-green-800",
@@ -14,13 +9,23 @@ const estadoColor = {
   inactivo: "bg-gray-100 text-gray-600",
 };
 
-const Pacientes = ({ pacienteId, setPacienteId, onVerCalendario, onVerActividades }) => {
+const Pacientes = ({ pacienteId, setPacienteId, onVerCalendario, onVerActividades, onViewProfile }) => {
   const [search, setSearch] = useState("");
   const [pacientes, setPacientes] = useState([]);
 
   useEffect(() => {
-    // Simulamos fetch de la API
-    setPacientes(pacientesFake);
+    const loadPacientes = async () => {
+      const user = JSON.parse(localStorage.getItem("usuario"));
+      if (user?._id) {
+        try {
+          const data = await getPacientes(user._id);
+          setPacientes(data);
+        } catch (error) {
+          console.error("Error al cargar pacientes", error);
+        }
+      }
+    };
+    loadPacientes();
   }, []);
 
   const pacientesFiltrados = pacientes.filter((p) =>
@@ -61,10 +66,12 @@ const Pacientes = ({ pacienteId, setPacienteId, onVerCalendario, onVerActividade
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="font-semibold text-gray-800">{p.nombre}</h3>
+                  <p className="text-sm text-gray-500">{p.email}</p>
+                  {p.telefono && <p className="text-sm text-gray-500">{p.telefono}</p>}
                   <span
-                    className={`text-xs font-medium mt-1 inline-block px-2 py-0.5 rounded ${estadoColor[p.estado]}`}
+                    className={`text-xs font-medium mt-2 inline-block px-2 py-0.5 rounded ${estadoColor[p.estado] || "bg-gray-100"}`}
                   >
-                    {p.estado}
+                    {p.estado || "activo"}
                   </span>
                 </div>
                 {isSelected && <Check className="w-5 h-5 text-blue-500" />}
@@ -73,7 +80,8 @@ const Pacientes = ({ pacienteId, setPacienteId, onVerCalendario, onVerActividade
               <div className="flex justify-end gap-2 mt-3">
                 <button
                   className="text-gray-500 hover:text-gray-800"
-                  title="Editar paciente"
+                  title="Ver Perfil"
+                  onClick={(e) => { e.stopPropagation(); onViewProfile(p._id); }}
                 >
                   <Edit className="w-4 h-4" />
                 </button>

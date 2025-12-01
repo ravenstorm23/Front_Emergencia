@@ -5,10 +5,12 @@ import {
   ClipboardList,
   Users,
   Calendar,
+  MessageCircle,
   Settings,
   LogOut,
   Menu,
   X,
+  FileText,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -24,6 +26,8 @@ const SidebarCuidador = () => {
     { path: "/alertas-config", label: "Configurar Alertas", icon: Bell },
     { path: "/pacientes", label: "Pacientes", icon: Users },
     { path: "/calendario", label: "Calendario", icon: Calendar },
+    { path: "/reportes", label: "Reportes", icon: FileText },
+    { path: "/chat", label: "Mensajes", icon: MessageCircle },
     { path: "/configuracion", label: "Configuración", icon: Settings },
   ];
 
@@ -37,6 +41,8 @@ const SidebarCuidador = () => {
     // Redirigir a login
     navigate("/login");
   };
+
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   return (
     <>
@@ -52,7 +58,12 @@ const SidebarCuidador = () => {
         className={`fixed md:static top-0 left-0 h-screen w-64 bg-white shadow-md flex flex-col transform transition-transform duration-300 z-40
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
-        <div className="p-6 text-2xl font-bold text-blue-600 border-b">CuidApp</div>
+        <div className="p-6 border-b">
+          <div className="text-xl font-bold text-blue-600">Panel del Cuidador</div>
+          {user.nombre && (
+            <div className="text-sm text-gray-600 mt-1 font-medium">{user.nombre}</div>
+          )}
+        </div>
 
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           {menu.map((item) => {

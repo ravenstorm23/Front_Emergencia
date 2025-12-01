@@ -12,6 +12,7 @@ export default function VincularPaciente() {
     const [patients, setPatients] = useState([]);
     const [toast, setToast] = useState(null);
     const [linking, setLinking] = useState(false);
+    const [relationship, setRelationship] = useState("");
 
     useEffect(() => {
         loadPatients();
@@ -37,11 +38,18 @@ export default function VincularPaciente() {
             return;
         }
 
+        if (!relationship) {
+            setToast({ type: "warning", message: "Por favor selecciona el tipo de relación" });
+            return;
+        }
+
         try {
             setLinking(true);
-            await linkPatientWithCode(code);
+            setLinking(true);
+            await linkPatientWithCode(code, relationship);
             setToast({ type: "success", message: "Paciente vinculado exitosamente" });
             setCode("");
+            setRelationship("");
             loadPatients();
         } catch (error) {
             console.error("Error linking patient:", error);
@@ -102,9 +110,27 @@ export default function VincularPaciente() {
                                 </p>
                             </div>
 
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Tipo de Relación
+                                </label>
+                                <select
+                                    value={relationship}
+                                    onChange={(e) => setRelationship(e.target.value)}
+                                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition text-lg"
+                                    disabled={linking}
+                                >
+                                    <option value="">Selecciona una relación</option>
+                                    <option value="Familiar">Familiar</option>
+                                    <option value="Enfermero">Enfermero</option>
+                                    <option value="Amigo">Amigo</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+
                             <button
                                 type="submit"
-                                disabled={linking || !code.trim()}
+                                disabled={linking || !code.trim() || !relationship}
                                 className="w-full bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition font-medium shadow-lg flex items-center justify-center gap-2"
                             >
                                 {linking ? (

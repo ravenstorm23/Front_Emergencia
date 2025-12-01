@@ -29,6 +29,7 @@ const Paciente = () => {
           setPacienteId={setPacienteId}
           onVerCalendario={handleVerCalendario}
           onVerActividades={handleVerActividades}
+          onViewProfile={(id) => navigate(`/pacientes/${id}`)}
         />
       </main>
     </div>

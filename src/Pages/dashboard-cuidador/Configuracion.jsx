@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SidebarCuidador from "./components/SidebarCuidador";
 import ConfigForm from "./components/ConfigForm";
 
-// Simulación de usuario
-const usuarioFake = {
-  nombre: "Juan Pérez",
-  correo: "juan.perez@mail.com",
-  telefono: "3123456789",
-};
-
 const Configuracion = () => {
-  const [user, setUser] = useState(usuarioFake);
+  const [user, setUser] = useState({
+    nombre: "",
+    correo: "",
+    telefono: "",
+  });
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("usuario"));
+    if (storedUser) {
+      setUser({
+        nombre: storedUser.nombre || "",
+        correo: storedUser.email || "",
+        telefono: storedUser.telefono || "",
+      });
+    }
+  }, []);
 
   const handleSave = (data) => {
     // Aquí harías llamada a la API para guardar cambios

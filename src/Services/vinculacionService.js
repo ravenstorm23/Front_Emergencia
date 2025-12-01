@@ -47,11 +47,14 @@ export const getLinkedCaregivers = async () => {
 };
 
 // Vincular paciente con código (cuidador)
-export const linkPatientWithCode = async (code) => {
+export const linkPatientWithCode = async (code, relationship) => {
     const token = localStorage.getItem("token");
     const response = await axios.post(
-        `${API_URL}/cuidador/vincular-paciente`,
-        { codigo: code },
+        `${API_URL}/vincular`,
+        {
+            codigo_adulto_mayor: code,
+            tipo_relacion: relationship
+        },
         {
             headers: { Authorization: `Bearer ${token}` },
         }

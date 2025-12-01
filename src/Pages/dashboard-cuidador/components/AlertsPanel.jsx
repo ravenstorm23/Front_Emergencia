@@ -5,7 +5,7 @@
 
 import { AlertCircle, AlertTriangle, Info, X } from "lucide-react";
 
-const AlertsPanel = ({ alerts = [], onDismiss }) => {
+const AlertsPanel = ({ alerts = [], onDismiss, showHeader = true }) => {
   const getAlertStyle = (type) => {
     switch (type) {
       case "urgent":
@@ -42,12 +42,14 @@ const AlertsPanel = ({ alerts = [], onDismiss }) => {
   return (
     <div className="bg-white rounded-lg shadow p-6">
       {/* Encabezado */}
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">Alertas</h3>
-        <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-          {alerts.filter((a) => a.type === "urgent").length}
-        </span>
-      </div>
+      {showHeader && (
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">Alertas</h3>
+          <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+            {alerts.filter((a) => a.type === "urgent").length}
+          </span>
+        </div>
+      )}
 
       {/* Contenedor de alertas */}
       <div className="space-y-3 max-h-80 overflow-y-auto">

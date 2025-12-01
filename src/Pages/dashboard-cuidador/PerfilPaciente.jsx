@@ -42,11 +42,9 @@ const PerfilPaciente = () => {
                         const alertsData = await getAlerts(found._id);
                         setAlertas(alertsData);
 
-                        // 3. Cargar actividades (filtrando por pacienteId si es necesario)
-                        // Nota: Si el endpoint devuelve todas, filtramos aquí. Idealmente el endpoint soportaría ?pacienteId=...
-                        const actividadesData = await obtenerActividades();
-                        const filteredActividades = actividadesData.filter(a => a.pacienteId === found._id);
-                        setActividades(filteredActividades);
+                        // 3. Cargar actividades del paciente (usando filtro del backend)
+                        const actividadesData = await obtenerActividades(found._id);
+                        setActividades(actividadesData);
                     }
                 }
             } catch (error) {

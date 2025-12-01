@@ -3,7 +3,7 @@
 import axios from "axios";
 
 // Configuración base del backend para usuarios
-const API_URL = "http://localhost:4000/api/user";
+const API_URL = "http://localhost:4000/api/usuarios";
 
 // GET → Obtener todos los usuarios
 export const getAllUsers = async () => {
@@ -19,7 +19,10 @@ export const getAllUsers = async () => {
 // GET → Obtener un usuario por ID
 export const getUserById = async (id) => {
   try {
-    const response = await axios.get(`${API_URL}/${id}`);
+    const token = localStorage.getItem("token");
+    const response = await axios.get(`${API_URL}/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     return response.data;
   } catch (error) {
     console.error("Error en getUserById:", error.response?.data || error.message);
@@ -27,11 +30,14 @@ export const getUserById = async (id) => {
   }
 };
 
-// PUT → Actualizar usuario
+// PATCH → Actualizar usuario
 export const updateUser = async (id, userData) => {
   try {
-    const response = await axios.put(`${API_URL}/${id}`, userData);
-    return response.data;
+    const token = localStorage.getItem("token");
+    const response = await axios.patch(`${API_URL}/${id}`, userData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data.usuario || response.data;
   } catch (error) {
     console.error("Error en updateUser:", error.response?.data || error.message);
     throw error;

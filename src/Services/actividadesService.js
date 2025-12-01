@@ -4,9 +4,10 @@ const API_URL = "http://localhost:4000/api/actividades";
 
 const getToken = () => localStorage.getItem("token");
 
-// Obtener actividades
-export const obtenerActividades = async () => {
-  const res = await axios.get(API_URL, {
+// Obtener actividades (con filtro opcional por pacienteId)
+export const obtenerActividades = async (pacienteId = null) => {
+  const url = pacienteId ? `${API_URL}?pacienteId=${pacienteId}` : API_URL;
+  const res = await axios.get(url, {
     headers: { Authorization: `Bearer ${getToken()}` },
   });
   return res.data;

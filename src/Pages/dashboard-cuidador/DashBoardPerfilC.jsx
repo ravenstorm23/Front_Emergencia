@@ -43,9 +43,9 @@ const DashBoardPerfilC = () => {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <StatsCard title="Pacientes activos" value={patients.length} icon={Users} bg="bg-white" text="text-gray-900" />
-          <StatsCard title="Signos vitales monitoreados" value={activities.length} icon={Heart} bg="bg-white" text="text-gray-900" />
-          <StatsCard title="Tareas pendientes" value={activities.filter(a => a.estado === 'pendiente').length} icon={ClipboardList} bg="bg-white" text="text-gray-900" />
+          <StatsCard title="Pacientes activos" value={Array.isArray(patients) ? patients.length : 0} icon={Users} bg="bg-white" text="text-gray-900" />
+          <StatsCard title="Signos vitales monitoreados" value={Array.isArray(activities) ? activities.length : 0} icon={Heart} bg="bg-white" text="text-gray-900" />
+          <StatsCard title="Tareas pendientes" value={Array.isArray(activities) ? activities.filter(a => a.estado === 'pendiente').length : 0} icon={ClipboardList} bg="bg-white" text="text-gray-900" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -56,7 +56,7 @@ const DashBoardPerfilC = () => {
         <QuickActions bg="bg-white" text="text-gray-900" />
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {patients.map(patient => (
+          {Array.isArray(patients) && patients.map(patient => (
             <PatientCard key={patient._id} patient={patient} bg="bg-white" text="text-gray-900" />
           ))}
         </div>

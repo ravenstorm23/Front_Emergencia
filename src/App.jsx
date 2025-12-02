@@ -22,6 +22,8 @@ import ConfiguracionAlertasCuidador from "./Pages/dashboard-cuidador/Configuraci
 import ReportesCuidador from "./Pages/dashboard-cuidador/ReportesCuidador";
 import ChatCuidador from "./Pages/dashboard-cuidador/ChatCuidador";
 import ConfiguracionMayor from "./Pages/dashboard-mayor/ConfiguracionMayor";
+import MiCuidador from "./Pages/dashboard-mayor/MiCuidador";
+import MiFamilia from "./Pages/dashboard-mayor/MiFamilia";
 import { TaskProvider } from "./context/TaskContext";
 
 function AppContent() {
@@ -52,6 +54,8 @@ function AppContent() {
         <Route path="alertas" element={<ConfiguracionAlertasMayor />} />
         <Route path="salud" element={<MiSalud />} />
         <Route path="configuracion" element={<ConfiguracionMayor />} />
+        <Route path="cuidador" element={<MiCuidador />} />
+        <Route path="familia" element={<MiFamilia />} />
       </Route>
     </Routes>
   );

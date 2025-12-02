@@ -6,8 +6,17 @@
 import { MapPin, Calendar, AlertCircle } from "lucide-react";
 
 const PatientCard = ({ patient }) => {
+  // Mapeo de datos seguros
+  const name = patient?.nombre || "Sin nombre";
+  const age = patient?.edad || "N/A";
+  const status = patient?.estado || "estable";
+  const location = patient?.direccion || "No registrada";
+  const nextVisit = "Pendiente"; // Dato simulado si no existe en backend
+  const lastVisit = "Reciente";  // Dato simulado si no existe en backend
+  const alerts = [];             // Dato simulado si no existe en backend
+
   const getStatusColor = (status) => {
-    switch (status) {
+    switch (status?.toLowerCase()) {
       case "estable":
         return "bg-green-100 text-green-800";
       case "atencion":
@@ -26,23 +35,25 @@ const PatientCard = ({ patient }) => {
         <div className="flex items-center">
           <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-3">
             <span className="text-blue-600 font-semibold text-lg">
-              {patient.name
+              {name
                 .split(" ")
                 .map((n) => n[0])
-                .join("")}
+                .join("")
+                .substring(0, 2)
+                .toUpperCase()}
             </span>
           </div>
           <div>
-            <h4 className="font-semibold text-gray-900">{patient.name}</h4>
-            <p className="text-sm text-gray-500">{patient.age} años</p>
+            <h4 className="font-semibold text-gray-900">{name}</h4>
+            <p className="text-sm text-gray-500">{age} años</p>
           </div>
         </div>
         <span
           className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
-            patient.status
+            status
           )}`}
         >
-          {patient.status.charAt(0).toUpperCase() + patient.status.slice(1)}
+          {status.charAt(0).toUpperCase() + status.slice(1)}
         </span>
       </div>
 
@@ -50,17 +61,17 @@ const PatientCard = ({ patient }) => {
       <div className="space-y-2 text-sm">
         <div className="flex items-center text-gray-600">
           <MapPin className="w-4 h-4 mr-2" />
-          <span>{patient.location}</span>
+          <span>{location}</span>
         </div>
         <div className="flex items-center text-gray-600">
           <Calendar className="w-4 h-4 mr-2" />
-          <span>Próxima visita: {patient.nextVisit}</span>
+          <span>Próxima visita: {nextVisit}</span>
         </div>
 
-        {patient.alerts && patient.alerts.length > 0 && (
+        {alerts && alerts.length > 0 && (
           <div className="flex items-start text-orange-600 mt-2 p-2 bg-orange-50 rounded">
             <AlertCircle className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
-            <span className="text-xs">{patient.alerts[0]}</span>
+            <span className="text-xs">{alerts[0]}</span>
           </div>
         )}
       </div>
@@ -68,7 +79,7 @@ const PatientCard = ({ patient }) => {
       {/* Pie de tarjeta */}
       <div className="mt-3 pt-3 border-t border-gray-100">
         <div className="flex justify-between text-xs text-gray-500">
-          <span>Última visita: {patient.lastVisit}</span>
+          <span>Última visita: {lastVisit}</span>
           <span className="text-blue-600 font-medium">Ver detalles →</span>
         </div>
       </div>

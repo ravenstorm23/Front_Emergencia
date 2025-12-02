@@ -55,7 +55,7 @@ const SidebarCuidador = () => {
       </button>
 
       <aside
-        className={`fixed md:static top-0 left-0 h-screen w-64 bg-white shadow-md flex flex-col transform transition-transform duration-300 z-40
+        className={`fixed md:sticky top-0 left-0 h-full md:h-screen w-64 bg-white shadow-md flex flex-col transform transition-transform duration-300 z-40
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
         <div className="p-6 border-b">

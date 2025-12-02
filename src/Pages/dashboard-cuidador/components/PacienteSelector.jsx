@@ -15,14 +15,20 @@ const Pacientes = ({ pacienteId, setPacienteId, onVerCalendario, onVerActividade
 
   useEffect(() => {
     const loadPacientes = async () => {
-      const user = JSON.parse(localStorage.getItem("usuario"));
-      if (user?._id) {
-        try {
-          const data = await getPacientes(user._id);
+      try {
+        console.log("PacienteSelector: Cargando pacientes...");
+        const data = await getPacientes(); // Ya no pasa user._id, usa el token
+        console.log("PacienteSelector: Datos recibidos:", data);
+        if (Array.isArray(data)) {
           setPacientes(data);
-        } catch (error) {
-          console.error("Error al cargar pacientes", error);
+          console.log(`PacienteSelector: ${data.length} pacientes cargados`);
+        } else {
+          console.warn("PacienteSelector: Los datos no son un array");
+          setPacientes([]);
         }
+      } catch (error) {
+        console.error("Error al cargar pacientes", error);
+        setPacientes([]);
       }
     };
     loadPacientes();

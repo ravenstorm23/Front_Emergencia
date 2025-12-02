@@ -30,22 +30,39 @@ const PerfilPaciente = () => {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const user = JSON.parse(localStorage.getItem("user"));
-                if (user?._id) {
-                    // 1. Cargar datos del paciente
-                    const pacientes = await getPacientes(user._id);
-                    const found = pacientes.find(p => p._id === id);
-                    setPaciente(found);
+                console.log("PerfilPaciente: Cargando datos para ID:", id);
 
-                    if (found) {
-                        // 2. Cargar alertas del paciente
+                // 1. Cargar datos del paciente
+                const pacientes = await getPacientes(); // Sin parámetro
+                console.log("PerfilPaciente: Pacientes recibidos:", pacientes);
+
+                const found = pacientes.find(p => p._id === id);
+                console.log("PerfilPaciente: Paciente encontrado:", found);
+
+                setPaciente(found);
+
+                if (found) {
+                    // 2. Cargar alertas del paciente
+                    try {
                         const alertsData = await getAlerts(found._id);
+                        console.log("PerfilPaciente: Alertas recibidas:", alertsData);
                         setAlertas(alertsData);
-
-                        // 3. Cargar actividades del paciente (usando filtro del backend)
-                        const actividadesData = await obtenerActividades(found._id);
-                        setActividades(actividadesData);
+                    } catch (error) {
+                        console.error("Error al cargar alertas:", error);
+                        setAlertas([]);
                     }
+
+                    // 3. Cargar actividades del paciente
+                    try {
+                        const actividadesData = await obtenerActividades(found._id);
+                        console.log("PerfilPaciente: Actividades recibidas:", actividadesData);
+                        setActividades(actividadesData);
+                    } catch (error) {
+                        console.error("Error al cargar actividades:", error);
+                        setActividades([]);
+                    }
+                } else {
+                    console.warn("PerfilPaciente: No se encontró el paciente con ID:", id);
                 }
             } catch (error) {
                 console.error("Error loading patient data:", error);
@@ -136,9 +153,12 @@ const PerfilPaciente = () => {
                                 <h3 className="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wider">Medicamentos</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {paciente.medicamentos ? (
-                                        paciente.medicamentos.split(',').map((med, i) => (
+                                        (Array.isArray(paciente.medicamentos)
+                                            ? paciente.medicamentos
+                                            : paciente.medicamentos.split(',')
+                                        ).map((med, i) => (
                                             <span key={i} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">
-                                                {med.trim()}
+                                                {typeof med === 'string' ? med.trim() : med}
                                             </span>
                                         ))
                                     ) : (
@@ -150,9 +170,12 @@ const PerfilPaciente = () => {
                                 <h3 className="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wider">Enfermedades / Condiciones</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {paciente.enfermedades ? (
-                                        paciente.enfermedades.split(',').map((enf, i) => (
+                                        (Array.isArray(paciente.enfermedades)
+                                            ? paciente.enfermedades
+                                            : paciente.enfermedades.split(',')
+                                        ).map((enf, i) => (
                                             <span key={i} className="px-3 py-1 bg-red-50 text-red-700 rounded-full text-sm">
-                                                {enf.trim()}
+                                                {typeof enf === 'string' ? enf.trim() : enf}
                                             </span>
                                         ))
                                     ) : (

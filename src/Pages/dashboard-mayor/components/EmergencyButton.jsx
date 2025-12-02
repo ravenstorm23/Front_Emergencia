@@ -1,21 +1,38 @@
-import React from "react";
-import { AlertTriangle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Phone } from 'lucide-react';
 
 const EmergencyButton = () => {
-  const navigate = useNavigate();
+  const [telefonoFamiliar, setTelefonoFamiliar] = useState('');
+
+  useEffect(() => {
+    // Obtener el teléfono del familiar desde localStorage
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const telefono = user.telefonoFamiliar || '';
+    setTelefonoFamiliar(telefono);
+    console.log('EmergencyButton: Teléfono del familiar:', telefono);
+  }, []);
+
+  if (!telefonoFamiliar) {
+    // Si no hay teléfono registrado, mostrar mensaje
+    return (
+      <button
+        onClick={() => alert('⚠️ Por favor registra un contacto de emergencia en Configuración')}
+        className="fixed bottom-8 right-8 bg-gray-400 text-white p-6 rounded-full shadow-2xl hover:bg-gray-500 transition-all z-50 flex items-center justify-center cursor-not-allowed"
+        title="Registra un contacto de emergencia"
+      >
+        <Phone size={32} />
+      </button>
+    );
+  }
 
   return (
-    <button
-      onClick={() => navigate("/dashboard-mayor/emergencia")}
-      className="fixed bottom-8 right-8 z-50 bg-gradient-to-br from-red-500 to-red-700 text-white rounded-full p-6 shadow-2xl hover:scale-110 active:scale-95 transition-all duration-200 flex items-center gap-3 group animate-pulse hover:animate-none"
-      aria-label="Botón de emergencia"
+    <a
+      href={`tel:${telefonoFamiliar}`}
+      className="fixed bottom-8 right-8 bg-red-600 text-white p-6 rounded-full shadow-2xl hover:bg-red-700 hover:scale-110 transition-all animate-pulse z-50 flex items-center justify-center"
+      title={`Llamar a emergencia: ${telefonoFamiliar}`}
     >
-      <AlertTriangle className="w-10 h-10" />
-      <span className="font-bold text-xl hidden group-hover:inline-block">
-        EMERGENCIA
-      </span>
-    </button>
+      <Phone size={32} />
+    </a>
   );
 };
 

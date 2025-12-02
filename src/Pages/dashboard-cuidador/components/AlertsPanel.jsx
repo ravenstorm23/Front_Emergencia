@@ -46,14 +46,14 @@ const AlertsPanel = ({ alerts = [], onDismiss, showHeader = true }) => {
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900">Alertas</h3>
           <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-            {alerts.filter((a) => a.type === "urgent").length}
+            {Array.isArray(alerts) ? alerts.filter((a) => a.type === "urgent").length : 0}
           </span>
         </div>
       )}
 
       {/* Contenedor de alertas */}
       <div className="space-y-3 max-h-80 overflow-y-auto">
-        {alerts.length === 0 ? (
+        {!Array.isArray(alerts) || alerts.length === 0 ? (
           <p className="text-gray-500 text-sm text-center py-4">
             No hay alertas recientes.
           </p>

@@ -1,12 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { SummaryItem } from './SummaryItem';
-import { Heart, Pill, Activity, Calendar, Phone, ChevronRight } from 'lucide-react';
+import { Heart, Pill, Activity, Calendar, Phone } from 'lucide-react';
 
 
 export const DailySummary = ({ medications, activities, appointment, caregiver, onNavigate }) => {
+  const navigate = useNavigate();
   const pendingMeds = medications.filter(m => !m.taken);
   const nextMed = pendingMeds[0];
-  
+
   const pendingActivities = activities.filter(a => !a.completed);
   const nextActivity = pendingActivities[0];
 
@@ -60,29 +62,41 @@ export const DailySummary = ({ medications, activities, appointment, caregiver, 
         )}
 
         {/* Estado del cuidador */}
-        <div className="bg-white rounded-xl p-5 border-2 border-gray-200">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl font-bold">
-                {caregiver.name.charAt(0)}
-              </div>
-              <div>
-                <p className="text-xl font-bold text-gray-800">{caregiver.name}</p>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                  <span className="text-lg text-gray-600">Disponible ahora</span>
+        {caregiver ? (
+          <div className="bg-white rounded-xl p-5 border-2 border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                  {caregiver.name.charAt(0)}
+                </div>
+                <div>
+                  <p className="text-xl font-bold text-gray-800">{caregiver.name}</p>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+                    <span className="text-lg text-gray-600">Disponible ahora</span>
+                  </div>
                 </div>
               </div>
+              <button
+                onClick={() => onNavigate('cuidador')}
+                className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl transition flex items-center gap-2"
+              >
+                <Phone size={24} />
+                <span className="hidden md:inline">Llamar</span>
+              </button>
             </div>
-            <button 
-              onClick={() => onNavigate('cuidador')}
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl transition flex items-center gap-2"
+          </div>
+        ) : (
+          <div className="bg-gray-50 rounded-xl p-5 border-2 border-gray-200 text-center">
+            <p className="text-gray-600 mb-3">No tienes cuidadores vinculados</p>
+            <button
+              onClick={() => navigate('/dashboard-mayor/vincular')}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl transition"
             >
-              <Phone size={24} />
-              <span className="hidden md:inline">Llamar</span>
+              Vincular Cuidador
             </button>
           </div>
-        </div>
+        )}
 
         {/* Resumen numérico */}
         <div className="grid grid-cols-3 gap-4 mt-6">

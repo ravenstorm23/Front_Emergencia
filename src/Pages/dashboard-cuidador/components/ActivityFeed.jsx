@@ -10,7 +10,7 @@ const ActivityFeed = ({ activities = [] }) => {
       </h3>
 
       <div className="space-y-4">
-        {activities.length === 0 ? (
+        {!Array.isArray(activities) || activities.length === 0 ? (
           <p className="text-gray-500 text-sm text-center py-4">
             No hay actividades registradas recientemente.
           </p>

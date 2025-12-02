@@ -45,18 +45,53 @@ export default function VincularPaciente() {
 
         try {
             setLinking(true);
-            setLinking(true);
             await linkPatientWithCode(code, relationship);
-            setToast({ type: "success", message: "Paciente vinculado exitosamente" });
+            setToast({ type: "success", message: "✅ Paciente vinculado exitosamente" });
             setCode("");
             setRelationship("");
             loadPatients();
         } catch (error) {
             console.error("Error linking patient:", error);
-            setToast({
-                type: "error",
-                message: error.response?.data?.msg || "Código inválido o error al vincular"
-            });
+
+            if (error.response) {
+                const status = error.response.status;
+                const msg = error.response.data?.msg || error.response.data?.message;
+
+                if (status === 403) {
+                    // ⛔ Error de Rol: Intentando vincular desde cuenta de Adulto Mayor
+                    setToast({
+                        type: "error",
+                        message: `⛔ ACCESO DENEGADO: ${msg || 'Solo los cuidadores pueden vincular pacientes'}`
+                    });
+                } else if (status === 400) {
+                    // ⚠️ Error de Validación: Auto-vinculación o código vacío
+                    setToast({
+                        type: "warning",
+                        message: `⚠️ ATENCIÓN: ${msg || 'Verifica los datos ingresados'}`
+                    });
+                } else if (status === 404) {
+                    // ❌ Error de Código: El código no existe
+                    setToast({
+                        type: "error",
+                        message: `❌ CÓDIGO INVÁLIDO: ${msg || 'El código no existe o es incorrecto'}`
+                    });
+                } else {
+                    setToast({
+                        type: "error",
+                        message: msg || "Error al vincular paciente"
+                    });
+                }
+            } else if (error.request) {
+                setToast({
+                    type: "error",
+                    message: "⚠️ Error de conexión. Verifica que el servidor esté corriendo."
+                });
+            } else {
+                setToast({
+                    type: "error",
+                    message: error.message || "Error inesperado al vincular"
+                });
+            }
         } finally {
             setLinking(false);
         }

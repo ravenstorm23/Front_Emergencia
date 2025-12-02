@@ -40,10 +40,29 @@ export const linkWithCaregiver = async (code) => {
 // Obtener cuidadores vinculados (adulto mayor)
 export const getLinkedCaregivers = async () => {
     const token = localStorage.getItem("token");
-    const response = await axios.get(`${API_URL}/perfil-mayor/cuidadores`, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
-    return response.data;
+    try {
+        const response = await axios.get(`${API_URL}/perfil-mayor/cuidadores`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        console.log("Respuesta completa del backend:", response.data);
+
+        // El backend devuelve { cuidadores: [...] }
+        const cuidadores = response.data.cuidadores || response.data;
+
+        console.log("Cuidadores extraídos:", cuidadores);
+
+        if (!Array.isArray(cuidadores)) {
+            console.error("Los cuidadores no son un array:", cuidadores);
+            return [];
+        }
+
+        // Los cuidadores ya vienen con toda la info (nombre, email, telefono, direccion)
+        return cuidadores;
+    } catch (error) {
+        console.error("Error al obtener cuidadores:", error);
+        return [];
+    }
 };
 
 // Vincular paciente con código (cuidador)

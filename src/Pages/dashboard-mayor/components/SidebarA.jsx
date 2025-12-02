@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, Heart, Calendar, Users, UserCheck, Bell, LogOut, Menu, X } from "lucide-react";
+import { Home, Heart, Users, UserCheck, Bell, LogOut, Menu, X } from "lucide-react";
 
 const SidebarA = () => {
   const navigate = useNavigate();
@@ -11,10 +11,8 @@ const SidebarA = () => {
     { icon: <UserCheck size={22} />, label: "Vincular Cuidador", path: "/dashboard-mayor/vincular" },
     { icon: <Bell size={22} />, label: "Mis Alertas", path: "/dashboard-mayor/alertas" },
     { icon: <Heart size={22} />, label: "Mi Salud", path: "/dashboard-mayor/salud" },
-    { icon: <Calendar size={22} />, label: "Actividades", path: "/dashboard-mayor/actividades" },
     { icon: <Users size={22} />, label: "Mi Familia", path: "/dashboard-mayor/familia" },
     { icon: <UserCheck size={22} />, label: "Mi Cuidador", path: "/dashboard-mayor/cuidador" },
-    { icon: <Bell size={22} />, label: "Notificaciones", path: "/dashboard-mayor/notificaciones" },
     { icon: <Users size={22} />, label: "Configuración", path: "/dashboard-mayor/configuracion" },
   ];
 

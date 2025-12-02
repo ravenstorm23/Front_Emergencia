@@ -49,7 +49,9 @@ const ConfiguracionMayor = () => {
         setLoading(true);
         try {
             const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-            if (!storedUser._id) throw new Error("No hay sesión activa");
+            const userId = storedUser._id || storedUser.id;
+
+            if (!userId) throw new Error("No hay sesión activa");
 
             // Preparar datos para enviar
             const dataToUpdate = { ...user };
@@ -71,7 +73,7 @@ const ConfiguracionMayor = () => {
             // Eliminar password si está vacío
             if (!dataToUpdate.password) delete dataToUpdate.password;
 
-            const updatedUser = await updateUser(storedUser._id, dataToUpdate);
+            const updatedUser = await updateUser(userId, dataToUpdate);
 
             // Actualizar localStorage
             localStorage.setItem("user", JSON.stringify(updatedUser));
